@@ -87,6 +87,7 @@ controller.hears(patterns, ['ambient', 'direct_message'], function (bot, message
 
 // Post issue data to Slack
 function postIssueData(bot, message, issueNum) {
+
   let request_opts = [
     {
       url: `https://api.github.com/repos/${process.env.GITHUB_USER}/${process.env.GITHUB_REPO_NAME}/issues/${issueNum}`,
@@ -120,48 +121,56 @@ function postIssueData(bot, message, issueNum) {
     );
   }
 
-  Promise.all(promises).then(function(data) {
-    const github_data = data[0];
-    const zenhub_data = data[1];
+  Promise.all(promises)
+    .then(function(data) {
+      const github_data = data[0];
+      const zenhub_data = data[1];
 
-    bot.reply(message, {
-      "attachments": [
-        {
-          "color": "#36a64f",
-          "title": github_data.title,
-          "title_link": github_data.html_url,
-          "fields": [
-            {
-              "title": "Status",
-              "value": codify(zenhub_data.pipeline.name),
-              "short": true
-            },
-            {
-              "title": "Type",
-              "value": codify(zenhub_data.is_epic ? 'Epic' : 'Task'),
-              "short": true
-            },
-            {
-              "title": "Assignee",
-              "value": codify(github_data.assignee.login),
-              "short": true
-            },
-            {
-              "title": "Labels",
-              "value": github_data.labels.map(function(obj) {
-                return codify(obj.name)
-              }).join(', '),
-              "short": true
-            }
-          ]
-        }
-      ]
+      if (github_data.message) {
+        throw new Error(`Failed to pull data from Github. They told me: ${codify(github_data.message)}`);
+      }
+      if (zenhub_data.message) {
+        throw new Error(`Failed to pull data from Zenhub. They told me: ${codify(zenhub_data.message)}`);
+      }
+
+      bot.reply(message, {
+        "attachments": [
+          {
+            "color": "#36a64f",
+            "title": github_data.title,
+            "title_link": github_data.html_url,
+            "fields": [
+              {
+                "title": "Status",
+                "value": codify(zenhub_data.pipeline.name),
+                "short": true
+              },
+              {
+                "title": "Type",
+                "value": codify(zenhub_data.is_epic ? 'Epic' : 'Task'),
+                "short": true
+              },
+              {
+                "title": "Assignee",
+                "value": codify(github_data.assignee.login),
+                "short": true
+              },
+              {
+                "title": "Labels",
+                "value": github_data.labels.map(function(obj) {
+                  return codify(obj.name)
+                }).join(', '),
+                "short": true
+              }
+            ]
+          }
+        ]
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+      bot.reply(message, ':warning: ' + err.message);
     });
-
-
-  }, function(err) {
-    console.log(err);
-  });
 }
 
 // Enclose a string in a code block (Slack markdown)
