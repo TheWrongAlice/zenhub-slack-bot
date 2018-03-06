@@ -116,7 +116,7 @@ function postIssueData(bot, message, issueNum) {
       bot.reply(message, {
         "attachments": [
           {
-            "color": "#36a64f",
+            "color": "#5d78a1",
             "title": github_data.title,
             "title_link": github_data.html_url,
             "fields": [
