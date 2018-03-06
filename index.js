@@ -117,7 +117,7 @@ function postIssueData(bot, message, issueNum) {
         "attachments": [
           {
             "color": "#5d78a1",
-            "title": github_data.title,
+            "title": `${github_data.title} #${github_data.number}`,
             "title_link": github_data.html_url,
             "fields": [
               {
