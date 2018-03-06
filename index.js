@@ -26,28 +26,13 @@ function onInstallation(bot, installer) {
 
 
 /**
- * Configure the persistence options
- */
-
-let config = {};
-if (process.env.MONGOLAB_URI) {
-  const BotkitStorage = require('botkit-storage-mongo');
-  config = {
-    storage: BotkitStorage({mongoUri: process.env.MONGOLAB_URI}),
-  };
-}
-else {
-  config = {
-    json_file_store: ((process.env.SLACK_TOKEN)?'./db_slack_bot_ci/':'./db_slack_bot_a/'), //use a different name if an app or CI
-  };
-}
-
-
-/**
  * Are being run as an app or a custom integration? The initialization will differ, depending
  */
 
 let controller;
+let config = {
+  json_file_store: ((process.env.SLACK_TOKEN)?'./db_slack_bot_ci/':'./db_slack_bot_a/'), //use a different name if an app or CI
+};
 if (process.env.SLACK_TOKEN) {
   //Treat this as a custom integration
   const customIntegration = require('./lib/custom_integrations');
