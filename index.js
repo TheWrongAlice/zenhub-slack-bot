@@ -132,7 +132,7 @@ function postIssueData(bot, message, issueNum) {
               },
               {
                 "title": "Assignee",
-                "value": codify(github_data.assignee.login),
+                "value": codify(github_data.assignee ? github_data.assignee.login : 'Unassigned'),
                 "short": true
               },
               {
