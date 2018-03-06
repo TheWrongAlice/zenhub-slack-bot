@@ -131,17 +131,17 @@ function postIssueData(bot, message, issueNum) {
                 "short": true
               },
               {
-                "title": "Assignee",
-                "value": codify(github_data.assignee ? github_data.assignee.login : 'Unassigned'),
-                "short": true
-              },
-              {
                 "title": "Labels",
                 "value": github_data.labels.map(function(obj) {
                   return codify(obj.name)
                 }).join(', '),
                 "short": true
-              }
+              },
+              {
+                "title": "Assignee",
+                "value": github_data.assignee ? github_data.assignee.login : 'Unassigned',
+                "short": true
+              },
             ]
           }
         ]
