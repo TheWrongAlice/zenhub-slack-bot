@@ -1,7 +1,7 @@
 {
-  "name": "easy-peasy-bot",
+  "name": "zenhub-slack-bot",
   "version": "1.0.0",
-  "description": "The awesomest bot evar.",
+  "description": "Automatically fetches key details whenever an issue is mentioned.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -12,15 +12,17 @@
     "url": "git+https://github.com/DEGoodmanWilson/easy-peasy-bot-app.git"
   },
   "keywords": [
+    "zenhub",
+    "github",
     "slack",
     "bot"
   ],
-  "author": "D.E. Goodman-Wilson",
+  "author": "Alice Cyan Carlsson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DEGoodmanWilson/easy-peasy-bot-app/issues"
+    "url": "https://github.com/TheWrongAlice/zenhub-slack-bot/issues"
   },
-  "homepage": "https://github.com/DEGoodmanWilson/easy-peasy-bot-app#readme",
+  "homepage": "https://github.com/TheWrongAlice/zenhub-slack-bot#readme",
   "engines": {
     "node": "5.1.1"
   },
