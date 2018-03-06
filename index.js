@@ -69,19 +69,14 @@ else {
  * Core bot logic goes here!
  */
 
-// What the bot should listen for
-const patterns = [
-  '#[0-9]+',
-  'issue-[0-9]+',
-  'issues\/[0-9]+'
-];
-
 // Register listener
-controller.hears(patterns, ['ambient', 'direct_message'], function (bot, message) {
-  const matches = message.match[0].match(/\d+$/);
+controller.hears([/(#|issue-|issues\/)[0-9]+/g], ['ambient', 'direct_message'], function (bot, message) {
+  const matches = message.match;
   if (matches) {
-    const issueNum = parseInt(matches[0]);
-    postIssueData(bot, message, issueNum);
+    for (let i=0; i<matches.length; i++) {
+      const issueNum = parseInt(matches[i].match(/\d+$/));
+      postIssueData(bot, message, issueNum);
+    }
   }
 });
 
