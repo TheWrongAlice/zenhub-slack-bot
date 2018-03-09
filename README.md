@@ -2,7 +2,7 @@
 
 Get Zenhub issue previews in Slack when an issue is mentioned.
 
-![screenshot](https://github.com/TheWrongAlice/zenhub-slack-bot/blob/master/screenshot.png | width=500)
+<img src="https://github.com/TheWrongAlice/zenhub-slack-bot/blob/master/screenshot.png" width="500">
 
 _Based on [slackapi/easy-peasy-bot](https://github.com/slackapi/easy-peasy-bot)_
 
