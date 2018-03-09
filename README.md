@@ -7,11 +7,11 @@ _Based on [slackapi/easy-peasy-bot](https://github.com/slackapi/easy-peasy-bot)_
 ## Installation
 
 ### Creating the Slack app
-The easiest way is to create a configuration of Slack's own _Bots_ app.
+The easiest way is to create a configuration of Slack's own _Bots_ app.<br />
 Go to https://slack.com/apps/A0F7YS25R-bots and click "Add Configuration" to get started.
 
 ### Setting up the bot application
-_I'll assume that you are familiar with node.js. Otherwise there are tons of guides online._
+_We'll assume that you are familiar with node.js. Otherwise there are tons of guides online._
 
 Before we can get started, you need to set some environment variables.
 ```
@@ -35,7 +35,7 @@ npm start
 
 ## Usage
 
-Add the bot to any channel, or include it in your direct message conversations.
+Add the bot to any channel, or include it in your direct message conversations.<br />
 The bot will recognize issues by any these formats:
 ```
 #123
