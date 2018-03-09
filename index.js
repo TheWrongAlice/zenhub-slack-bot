@@ -118,7 +118,7 @@ function postIssueData(bot, message, issueNum) {
           {
             "color": "#5d78a1",
             "title": `${github_data.title} #${github_data.number}`,
-            "title_link": github_data.html_url,
+            "title_link": `https://app.zenhub.com/workspace/o/${process.env.GITHUB_USER}/${process.env.GITHUB_REPO_NAME}/issues/${github_data.number}`,
             "fields": [
               {
                 "title": "Status",
