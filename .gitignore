@@ -35,3 +35,6 @@ node_modules
 
 # File containing my environment variables
 env
+
+# OS
+.DS_Store
