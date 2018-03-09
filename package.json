@@ -27,6 +27,7 @@
     "node": "5.1.1"
   },
   "dependencies": {
-    "botkit": "0.2.2"
+    "botkit": "0.2.2",
+    "remove-markdown": "^0.2.2"
   }
 }

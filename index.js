@@ -2,7 +2,8 @@
  * A Bot for Slack!
  */
 
-request = require('request');
+const request = require('request');
+const removeMd = require('remove-markdown');
 
 
 /**
@@ -116,32 +117,23 @@ function postIssueData(bot, message, issueNum) {
       bot.reply(message, {
         "attachments": [
           {
-            "color": "#5d78a1",
+            "color": "#5e60ba",
             "title": `${github_data.title} #${github_data.number}`,
             "title_link": `https://app.zenhub.com/workspace/o/${process.env.GITHUB_USER}/${process.env.GITHUB_REPO_NAME}/issues/${github_data.number}`,
             "fields": [
               {
+                "value": truncate(removeMd(github_data.body), 160)
+              },
+              {
                 "title": "Status",
-                "value": codify(zenhub_data.pipeline.name),
-                "short": true
-              },
-              {
-                "title": "Type",
-                "value": codify(zenhub_data.is_epic ? 'Epic' : 'Task'),
-                "short": true
-              },
-              {
-                "title": "Labels",
-                "value": github_data.labels.map(function(obj) {
-                  return codify(obj.name)
-                }).join(', '),
+                "value": zenhub_data.pipeline.name,
                 "short": true
               },
               {
                 "title": "Assignee",
                 "value": github_data.assignee ? github_data.assignee.login : 'Unassigned',
                 "short": true
-              },
+              }
             ]
           }
         ]
@@ -151,6 +143,12 @@ function postIssueData(bot, message, issueNum) {
       console.log(err);
       bot.reply(message, ':warning: ' + err.message);
     });
+}
+
+// Truncate a string to desired length
+function truncate(s, len) {
+  const suf = s.length > len ? '...' : '';
+  return s.substring(0, len) + suf;
 }
 
 // Enclose a string in a code block (Slack markdown)
