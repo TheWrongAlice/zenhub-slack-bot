@@ -15,15 +15,7 @@ Go to https://slack.com/apps/A0F7YS25R-bots and click "Add Configuration" to get
 ### Setting up the bot application
 _We'll assume that you are familiar with node.js. Otherwise there are tons of guides online._
 
-Before we can get started, you need to set some environment variables.
-```
-export GITHUB_USER=TheWrongAlice           # Name of your Github user
-export GITHUB_REPO_NAME=zenhub-slack-bot   # Name of your Github repository
-export GITHUB_REPO_ID=123940607            # ID of your Github repository
-export GITHUB_TOKEN=yourtoken123           # Auth token for your Github account/repo
-export ZENHUB_TOKEN=yourtoken123           # Auth token for your Zenhub account
-export SLACK_TOKEN=yourtoken123            # Auth token for your Slack bot
-```
+Rename `config.example.js` to `config.js` and update with your information.
 
 Install some node dependencies
 ```

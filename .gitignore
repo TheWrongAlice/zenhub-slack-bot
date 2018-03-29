@@ -33,8 +33,8 @@ node_modules
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# File containing my environment variables
-env
-
 # OS
 .DS_Store
+
+# App
+config.js

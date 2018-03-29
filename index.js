@@ -1,9 +1,12 @@
+'use strict';
+
 /**
  * A Bot for Slack!
  */
 
 const request = require('request');
 const removeMd = require('remove-markdown');
+const config = require('./config');
 
 
 /**
@@ -27,26 +30,19 @@ function onInstallation(bot, installer) {
 
 
 /**
- * Are being run as an app or a custom integration? The initialization will differ, depending
+ * Initialize Slack integration
  */
 
 let controller;
-let config = {
-  json_file_store: ((process.env.SLACK_TOKEN)?'./db_slack_bot_ci/':'./db_slack_bot_a/'), //use a different name if an app or CI
-};
-if (process.env.SLACK_TOKEN) {
+if (config.slackToken) {
   //Treat this as a custom integration
   const customIntegration = require('./lib/custom_integrations');
-  const token = process.env.SLACK_TOKEN;
-  controller = customIntegration.configure(token, config, onInstallation);
-}
-else if (process.env.CLIENT_ID && process.env.CLIENT_SECRET && process.env.PORT) {
-  //Treat this as an app
-  const app = require('./lib/apps');
-  controller = app.configure(process.env.PORT, process.env.CLIENT_ID, process.env.CLIENT_SECRET, config, onInstallation);
+  const token = config.slackToken;
+  const ciConfig = { json_file_store: './db_slack_bot_ci/' };
+  controller = customIntegration.configure(token, ciConfig, onInstallation);
 }
 else {
-  console.log('Error: If this is a custom integration, please specify SLACK_TOKEN in the environment. If this is an app, please specify CLIENTID, CLIENTSECRET, and PORT in the environment');
+  console.log('Error: Please specify slackToken in the configuration.');
   process.exit(1);
 }
 
@@ -71,21 +67,21 @@ function postIssueData(bot, message, issueNum) {
 
   let request_opts = [
     {
-      url: `https://api.github.com/repos/${process.env.GITHUB_USER}/${process.env.GITHUB_REPO_NAME}/issues/${issueNum}`,
+      url: `https://api.github.com/repos/${config.githubUser}/${config.githubRepoName}/issues/${issueNum}`,
       method: 'GET',
       headers: {
         'User-Agent':   'Super Agent/0.0.1',
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `token ${process.env.GITHUB_TOKEN}`
+        'Authorization': `token ${config.githubToken}`
       }
     },
     {
-      url: `https://api.zenhub.io/p1/repositories/${process.env.GITHUB_REPO_ID}/issues/${issueNum}`,
+      url: `https://api.zenhub.io/p1/repositories/${config.githubRepoId}/issues/${issueNum}`,
       method: 'GET',
       headers: {
         'User-Agent':   'Super Agent/0.0.1',
         'Content-Type': 'application/x-www-form-urlencoded',
-        'X-Authentication-Token': process.env.ZENHUB_TOKEN
+        'X-Authentication-Token': config.zenhubToken
       }
     }
   ];
@@ -119,7 +115,7 @@ function postIssueData(bot, message, issueNum) {
           {
             "color": "#5e60ba",
             "title": `${github_data.title} #${github_data.number}`,
-            "title_link": `https://app.zenhub.com/workspace/o/${process.env.GITHUB_USER}/${process.env.GITHUB_REPO_NAME}/issues/${github_data.number}`,
+            "title_link": `https://app.zenhub.com/workspace/o/${config.githubUser}/${config.githubRepoName}/issues/${github_data.number}`,
             "fields": [
               {
                 "value": truncate(removeMd(github_data.body), 160)
