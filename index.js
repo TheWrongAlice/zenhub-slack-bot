@@ -65,7 +65,7 @@ controller.hears([/(#|issue-|issues\/)[0-9]+/g], ['ambient', 'direct_message'], 
 // Post issue data to Slack
 function postIssueData(bot, message, issueNum) {
 
-  let request_opts = [
+  let requestOpts = [
     {
       url: `https://api.github.com/repos/${config.githubUser}/${config.githubRepoName}/issues/${issueNum}`,
       method: 'GET',
@@ -87,10 +87,10 @@ function postIssueData(bot, message, issueNum) {
   ];
 
   let promises = [];
-  for (let i=0; i<request_opts.length; i++) {
+  for (let i=0; i<requestOpts.length; i++) {
     promises.push(
       new Promise(function(resolve, reject) {
-        request(request_opts[i], function (error, response, body) {
+        request(requestOpts[i], function (error, response, body) {
           if (error) return reject(error);
           resolve(JSON.parse(body));
         });
@@ -100,34 +100,34 @@ function postIssueData(bot, message, issueNum) {
 
   Promise.all(promises)
     .then(function(data) {
-      const github_data = data[0];
-      const zenhub_data = data[1];
+      const githubData = data[0];
+      const zenhubData = data[1];
 
-      if (github_data.message) {
-        throw new Error(`Failed to pull data from Github. They told me: ${codify(github_data.message)}`);
+      if (githubData.message) {
+        throw new Error(`Failed to pull data from Github. They told me: ${codify(githubData.message)}`);
       }
-      if (zenhub_data.message) {
-        throw new Error(`Failed to pull data from Zenhub. They told me: ${codify(zenhub_data.message)}`);
+      if (zenhubData.message) {
+        throw new Error(`Failed to pull data from Zenhub. They told me: ${codify(zenhubData.message)}`);
       }
 
       bot.reply(message, {
         "attachments": [
           {
             "color": "#5e60ba",
-            "title": `${github_data.title} #${github_data.number}`,
-            "title_link": `https://app.zenhub.com/workspace/o/${config.githubUser}/${config.githubRepoName}/issues/${github_data.number}`,
+            "title": `${githubData.title} #${githubData.number}`,
+            "title_link": `https://app.zenhub.com/workspace/o/${config.githubUser}/${config.githubRepoName}/issues/${githubData.number}`,
             "fields": [
               {
-                "value": truncate(removeMd(github_data.body), 160)
+                "value": truncate(removeMd(githubData.body), 160)
               },
               {
                 "title": "Status",
-                "value": zenhub_data.pipeline.name,
+                "value": zenhubData.pipeline.name,
                 "short": true
               },
               {
                 "title": "Assignee",
-                "value": github_data.assignee ? github_data.assignee.login : 'Unassigned',
+                "value": githubData.assignee ? githubData.assignee.login : 'Unassigned',
                 "short": true
               }
             ]
